@@ -14,6 +14,7 @@ class ShoeEncoder(ModelEncoder):
         "manufacturer",
         "model_name",
         "color",
+        "picture",
     ]
 
 @require_http_methods(["GET", "POST"])
@@ -28,7 +29,7 @@ def api_shoes(request, bin_id=None):
     Creates a new shoe
     """
     if request.method == "GET":
-        if bin_id==None:
+        if bin_id == None:
             shoes = Shoe.objects.all()
         else:
             shoes = Shoe.objects.filter(bin=bin_id)
@@ -42,6 +43,7 @@ def api_shoes(request, bin_id=None):
         try:
             import_href = f"/api/bins/{bin_id}/"
             binVO = BinVO.objects.get(import_href=import_href)
+            content["bin"]=binVO
 
         except BinVO.DoesNotExist:
             return JsonResponse(
@@ -49,7 +51,6 @@ def api_shoes(request, bin_id=None):
                 status=400,
             )
         shoe = Shoe.objects.create(**content)
-        print(shoe)
         return JsonResponse(
             shoe,
             encoder=ShoeEncoder,
