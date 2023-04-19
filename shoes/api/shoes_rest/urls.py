@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import api_shoes
+from .views import api_shoes, api_shoe
 
 
 urlpatterns = [
@@ -9,5 +9,5 @@ urlpatterns = [
     api_shoes,
     name="list_shoes",
     ),
-    # path("shoes/<int:id>/", api_shoe, name="api_location"),
+    path("shoes/<int:id>/", api_shoe, name="api_location"),
 ]

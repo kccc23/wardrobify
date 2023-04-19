@@ -7,15 +7,23 @@ import json
 from common.json import ModelEncoder
 from .models import Shoe, BinVO
 
+class BinVOEncoder(ModelEncoder):
+    model = BinVO
+    properties = ["import_href"]
 
 class ShoeEncoder(ModelEncoder):
     model = Shoe
     properties = [
         "manufacturer",
         "model_name",
+        "id",
         "color",
         "picture",
+        "bin",
     ]
+    encoders = {
+        "bin": BinVOEncoder(),
+    }
 
 @require_http_methods(["GET", "POST"])
 def api_shoes(request, bin_id=None):
@@ -57,16 +65,16 @@ def api_shoes(request, bin_id=None):
             safe=False,
         )
 
-# @require_http_methods(["DELETE", "GET", "PUT"])
-# def api_shoe(request, id):
-#     if request.method == "DELETE":
-#         try:
-#             shoe = Shoe.objects.get(id=id)
-#             shoe.delete()
-#             return JsonResponse(
-#                 shoe,
-#                 encoder=ShoeEncoder,
-#                 safe=False,
-#             )
-#         except Shoe.DoesNotExist:
-#             return JsonResponse({"message": "Does not exist"})
+@require_http_methods(["DELETE"])
+def api_shoe(request, id):
+    if request.method == "DELETE":
+        try:
+            shoe = Shoe.objects.get(id=id)
+            shoe.delete()
+            return JsonResponse(
+                shoe,
+                encoder=ShoeEncoder,
+                safe=False,
+            )
+        except Shoe.DoesNotExist:
+            return JsonResponse({"message": "Does not exist"})
