@@ -40,7 +40,7 @@ def api_shoes(request, bin_id=None):
     else:
         content = json.loads(request.body)
         try:
-            import_href = f"api/bins/{bin_id}/"
+            import_href = f"/api/bins/{bin_id}/"
             binVO = BinVO.objects.get(import_href=import_href)
 
         except BinVO.DoesNotExist:
@@ -49,6 +49,7 @@ def api_shoes(request, bin_id=None):
                 status=400,
             )
         shoe = Shoe.objects.create(**content)
+        print(shoe)
         return JsonResponse(
             shoe,
             encoder=ShoeEncoder,
