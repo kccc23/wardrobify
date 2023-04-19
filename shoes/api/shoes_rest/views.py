@@ -7,14 +7,23 @@ import json
 from common.json import ModelEncoder
 from .models import Shoe, BinVO
 
+class BinVOEncoder(ModelEncoder):
+    model = BinVO
+    properties = ["import_href"]
 
 class ShoeEncoder(ModelEncoder):
     model = Shoe
     properties = [
         "manufacturer",
         "model_name",
+        "id",
         "color",
+        "picture",
+        "bin",
     ]
+    encoders = {
+        "bin": BinVOEncoder(),
+    }
 
 @require_http_methods(["GET", "POST"])
 def api_shoes(request, bin_id=None):
@@ -28,7 +37,7 @@ def api_shoes(request, bin_id=None):
     Creates a new shoe
     """
     if request.method == "GET":
-        if bin_id==None:
+        if bin_id == None:
             shoes = Shoe.objects.all()
         else:
             shoes = Shoe.objects.filter(bin=bin_id)
@@ -40,8 +49,9 @@ def api_shoes(request, bin_id=None):
     else:
         content = json.loads(request.body)
         try:
-            import_href = f"api/bins/{bin_id}/"
+            import_href = f"/api/bins/{bin_id}/"
             binVO = BinVO.objects.get(import_href=import_href)
+            content["bin"]=binVO
 
         except BinVO.DoesNotExist:
             return JsonResponse(
@@ -55,16 +65,16 @@ def api_shoes(request, bin_id=None):
             safe=False,
         )
 
-# @require_http_methods(["DELETE", "GET", "PUT"])
-# def api_shoe(request, id):
-#     if request.method == "DELETE":
-#         try:
-#             shoe = Shoe.objects.get(id=id)
-#             shoe.delete()
-#             return JsonResponse(
-#                 shoe,
-#                 encoder=ShoeEncoder,
-#                 safe=False,
-#             )
-#         except Shoe.DoesNotExist:
-#             return JsonResponse({"message": "Does not exist"})
+@require_http_methods(["DELETE"])
+def api_shoe(request, id):
+    if request.method == "DELETE":
+        try:
+            shoe = Shoe.objects.get(id=id)
+            shoe.delete()
+            return JsonResponse(
+                shoe,
+                encoder=ShoeEncoder,
+                safe=False,
+            )
+        except Shoe.DoesNotExist:
+            return JsonResponse({"message": "Does not exist"})
