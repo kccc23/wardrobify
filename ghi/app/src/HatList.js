@@ -59,7 +59,7 @@ function HatList() {
                     <h5 className="card-title">{hat.color} {hat.fabric} {hat.style_name}</h5>
                     {locations.filter(location => location.href===hat.location.import_href).map(location =>(
                         <h6 className="card-subtitle mb-2 text-muted" key={location.href}>
-                        {location.closet_name} {location.section_number} {location.shelf_number}
+                        Location: {location.closet_name} {location.section_number} {location.shelf_number}
                         </h6>
                     ))}
                     {(del === hat.id) ? (
