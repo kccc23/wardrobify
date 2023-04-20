@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 function HatList() {
     const [hats, setHats] = useState([]);
+    const [locations, setLocations] = useState([]);
     const [del, setDel] = useState(null);
 
     const loadHats = async () => {
@@ -33,6 +34,16 @@ function HatList() {
 
     const confirmDelete = (hatID) => { setDel(hatID) };
 
+    const fetchData = async () => {
+        const url = 'http://localhost:8100/api/locations/';
+        const response = await fetch(url);
+        if (response.ok) {
+            const data = await response.json();
+            setLocations(data.locations);
+        }
+    }
+    useEffect(() => {fetchData();}, []);
+
     return (
       <div className="container">
         <h2>Hats</h2>
@@ -41,17 +52,22 @@ function HatList() {
         </div>
         <div className="row align-items-start">
           {hats.map(hat => (
-            <div key={hat.id} className="card col-md-4 mb-3 gap-2 shadow">
-              <img src={hat.picture} className="card-img-top" />
-              <div className="card-body">
-                <h5 className="card-title">{hat.color} {hat.fabric} {hat.style_name}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">{hat.location.import_href}</h6>
-                {(del === hat.id) ? (
-                    <button onClick={(event) => handleDelete(event, hat.id)} className="btn btn-outline-danger btn-sm">Confirm Delete</button>
-                ) : (
-                    <button onClick={() => confirmDelete(hat.id)} className="btn btn-outline-danger btn-sm">Delete</button>
-                )}
-
+            <div key={hat.id} className="col-md-4 mb-4">
+              <div className="card shadow">
+                <img src={hat.picture} className="card-img-top" alt="Image" />
+                <div className="card-body">
+                    <h5 className="card-title">{hat.color} {hat.fabric} {hat.style_name}</h5>
+                    {locations.filter(location => location.href===hat.location.import_href).map(location =>(
+                        <h6 className="card-subtitle mb-2 text-muted" key={location.href}>
+                        {location.closet_name} {location.section_number} {location.shelf_number}
+                        </h6>
+                    ))}
+                    {(del === hat.id) ? (
+                        <button onClick={(event) => handleDelete(event, hat.id)} className="btn btn-outline-danger btn-sm">Confirm Delete</button>
+                    ) : (
+                        <button onClick={() => confirmDelete(hat.id)} className="btn btn-outline-danger btn-sm">Delete</button>
+                    )}
+                </div>
               </div>
             </div>
           ))}

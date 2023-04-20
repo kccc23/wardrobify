@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
 
 function HatForm() {
     const [locations, setLocations] = useState([]);
@@ -22,7 +21,6 @@ function HatForm() {
             setLocations(data.locations);
         }
     }
-
     useEffect(() => {fetchData();}, []);
 
     const handleFormChange = (e) => {
@@ -91,7 +89,7 @@ function HatForm() {
                   <option value="">Choose a location</option>
                   {locations.map(location => (
                     <option key={location.href} value={location.href}>
-                        {location.href}
+                        Closet: {location.closet_name}  Section: {location.section_number}  Shelf: {location.shelf_number}
                     </option>
                   ))}
                 </select>
