@@ -15,7 +15,7 @@ function HatList() {
     };
     useEffect(() => {loadHats();}, []);
 
-    const handleDelete = async (event, hatId) => {
+    const handleConfirmDelete = async (event, hatId) => {
         event.preventDefault();
         const url = `http://localhost:8090/api/hats/${hatId}`;
 
@@ -32,7 +32,8 @@ function HatList() {
         }
     };
 
-    const confirmDelete = (hatID) => { setDel(hatID) };
+    const handleCancelDelete = () => { setDel(null) };
+    const handleDelete = (hatID) => { setDel(hatID) };
 
     const fetchData = async () => {
         const url = 'http://localhost:8100/api/locations/';
@@ -46,8 +47,8 @@ function HatList() {
 
     return (
       <div className="container">
-        <h2>Hats</h2>
-        <div>
+        <h2 className="text-center">Hats</h2>
+        <div className="text-center mb-3">
         <Link className="btn btn-outline-danger" aria-current="page" to="/hats/new">Create New Hat</Link>
         </div>
         <div className="row align-items-start">
@@ -63,9 +64,12 @@ function HatList() {
                         </h6>
                     ))}
                     {(del === hat.id) ? (
-                        <button onClick={(event) => handleDelete(event, hat.id)} className="btn btn-outline-danger btn-sm">Confirm Delete</button>
+                      <div className="d-grid gap-2">
+                        <button onClick={(event) => handleConfirmDelete(event, hat.id)} className="btn btn-outline-danger btn-sm" type="button">Confirm Delete</button>
+                        <button onClick={() => handleCancelDelete()} className="btn btn-outline-danger btn-sm" type="button">Cancel Delete</button>
+                      </div>
                     ) : (
-                        <button onClick={() => confirmDelete(hat.id)} className="btn btn-outline-danger btn-sm">Delete</button>
+                        <button onClick={() => handleDelete(hat.id)} className="btn btn-outline-danger btn-sm">Delete</button>
                     )}
                 </div>
               </div>
