@@ -3,7 +3,7 @@ from django.urls import reverse
 
 #might need to add a few more properties to the VO
 class BinVO(models.Model):
-    import_href = models.CharField(max_length=200, unique=True) 
+    import_href = models.CharField(max_length=200, unique=True)
 
 class Shoe(models.Model):
     manufacturer = models.CharField(max_length=200)

@@ -78,3 +78,5 @@ def api_shoe(request, id):
             )
         except Shoe.DoesNotExist:
             return JsonResponse({"message": "Does not exist"})
+
+
