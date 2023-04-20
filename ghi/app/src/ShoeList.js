@@ -41,7 +41,7 @@ function ShoeList() {
         };
         const response = await fetch(url, fetchConfig)
         if (response.ok) {
-            setShoes(shoes.filter(shoe => shoe.id != id))
+            setShoes(shoes.filter(shoe => shoe.id !== id))
         }
     }
 
@@ -53,7 +53,7 @@ function ShoeList() {
             <div className="row align-items-start">
                 {shoes.map(shoe => (
                     <div key={shoe.id} className="col-md-4 mb-4 card mb-3 shadow">
-                        <img src={shoe.picture} className="card-img-top" />
+                        <img src={shoe.picture} className="card-img-top" alt="Image"/>
                         <div className="card-body">
                             <h5 className="card-title">{shoe.model_name}</h5>
                             <h6 className="card-subtitle mb-2 text-muted">

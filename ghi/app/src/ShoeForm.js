@@ -64,8 +64,6 @@ function ShoeForm() {
 
         const response = await fetch(shoeUrl, fetchConfig);
         if (response.ok) {
-            const newShoe = await response.json();
-
             setManu('');
             setName('');
             setColor('');
